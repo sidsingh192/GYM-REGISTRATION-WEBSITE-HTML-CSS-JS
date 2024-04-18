@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="signup.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <title>DKS REGISTER</title>
+</head>
+ 
+<body>
+    <div class="container">
+        <div class="form">
+            <h1 id="h1">DKS REGISTER</h1>
+            <div class="btn">
+                <button class="signUpBtn">SIGN UP</button>
+                <button class="loginBtn">LOG IN</button>
+            </div>
+
+             <!-- SIGN UP PAGE -->
+      <form class="signUp" id="s" >
+        <div class="formGroup">
+          <input type="text" name="username" id="userName" placeholder="USER NAME" autocomplete="off">
+        </div>
+        <div class="formGroup">
+          <input type="email" name="email" placeholder="EMAIL ID" name="email" required autocomplete="off">
+        </div>
+        <div class="formGroup">
+          <input type="password" name="password" id="password" placeholder="PASSWORD" required autocomplete="off">
+        </div>
+        <div class="formGroup">
+          <input type="password" name="cPass" id="confirmPassword" placeholder="CONFIRM PASSWORD" required autocomplete="off">
+        </div>
+        <div class="checkBox">
+          <input type="checkbox" name="checkbox" id="checkbox">
+          <span class="text">I agree with term & conditions</span>
+        </div>
+        <div class="formGroup">
+          <button type="submit" class="btn2">REGISTER</button>
+        </div>
+ 
+      </form>
+        
+      <!------ Login Form -------- -->
+      <form class="login" id="l" >
+        <div class="formGroup">
+          <input type="email" placeholder="EMAIL ID" name="email" required autocomplete="off">
+        </div>
+        <div class="formGroup">
+          <input type="password" id="password" placeholder="PASSWORD" required autocomplete="off">
+         
+        </div>
+        <div class="checkBox">
+          <input type="checkbox" name="checkbox" id="checkbox">
+          <span class="text">Keep me signed in on this device</span>
+        </div>
+        <div class="formGroup">
+          <button type="submit" class="btn2">REGISTER</button>
+        </div>
+      </form>
+ 
+    </div>
+  </div>
+  <script>
+    let signUp = document.getElementById("s");
+    let logIn  = document.getElementById("l");
+    signUp.addEventListener("submit",(e)=>{
+      handleSubmit(e);
+    })
+    const handleSubmit=async(e)=>{
+      e.preventDefault();
+      let {username,email,password,cPass} = e.target;
+      if(password.value===cPass.value){
+      let res  = await fetch('http://localhost:3003/signup',
+      {method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({username:username.value,password:password.value,email:email.value})
+    }).then((data)=>data.json()).then((data)=>data);
+    if(res.error){
+      alert(res.message);
+    }else{
+      alert(res.message);
+      window.location.href="frontpage.html";
+    }
+      }else{
+        alert("Passwords do not match");
+      }
+    }
+    
+    logIn.addEventListener("submit",(e)=>{
+      handleLogin(e);
+    })
+    const handleLogin=async(e)=>{
+      e.preventDefault();
+      let {email,password} = e.target;
+      let res = await fetch('http://localhost:3003/signin',
+      {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:email.value,password:password.value})}
+      ).then((data)=>data.json()).then((data)=>data);
+      if(res.error){
+        alert(res.message)
+      }else{
+        alert(res.message);
+        window.location.href='frontpage.html'
+      }
+    }
+  </script>
+  <script src="signup.js"></script>
+</body>
+ 
+</html>
